@@ -244,6 +244,7 @@ def set_up_mapping(conn, index):
         mapping = {
             'filename'     : {'type': 'string'},
             'relative_path': {'type': 'string'},
+            'original_path': {'type': 'string'},
             'fileuuid'     : machine_readable_field_spec,
             'sipuuid'      : machine_readable_field_spec,
             'accessionid'  : machine_readable_field_spec,
@@ -636,10 +637,12 @@ def index_transfer_files(conn, uuid, pathToTransfer, index, type):
                 f = File.objects.get(currentlocation=relative_path,
                                      transfer_id=uuid)
                 file_uuid = f.uuid
+                original_path = f.originallocation
                 formats = _get_file_formats(f)
                 bulk_extractor_reports = _list_bulk_extractor_reports(pathToTransfer, file_uuid)
             except File.DoesNotExist:
                 file_uuid = ''
+                original_path = ''
                 formats = []
                 bulk_extractor_reports = []
 
@@ -657,7 +660,8 @@ def index_transfer_files(conn, uuid, pathToTransfer, index, type):
                 # TODO Index Backlog Location UUID?
                 indexData = {
                   'filename'     : filename,
-                  'relative_path' : relative_path,
+                  'relative_path': relative_path,
+                  'original_path': original_path,
                   'fileuuid'     : file_uuid,
                   'sipuuid'      : uuid,
                   'accessionid'  : accession_id,
