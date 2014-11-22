@@ -325,6 +325,8 @@ def connect_and_index_aip(uuid, name, filePath, pathToMETS, size=None, aips_in_a
             aic_identifier = dublincore.findtext('dc:identifier', namespaces=nsmap) or dublincore.findtext('dcterms:identifier', namespaces=nsmap)
         is_part_of = dublincore.findtext('dcterms:isPartOf', namespaces=nsmap)
 
+    accession_ids = [r[0] for r in File.objects.filter(sip_id=uuid).values_list('transfer__accessionid') if r[0]]
+
     aipData = {
         'uuid': uuid,
         'name': name,
@@ -337,6 +339,7 @@ def connect_and_index_aip(uuid, name, filePath, pathToMETS, size=None, aips_in_a
         'countAIPsinAIC': aips_in_aic,
         'identifiers': identifiers,
         'transferMetadata': _extract_transfer_metadata(root, nsmap),
+        'accession_ids': accession_ids,
     }
     wait_for_cluster_yellow_status(conn)
     try_to_index(conn, aipData, 'aips', 'aip')
