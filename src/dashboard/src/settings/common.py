@@ -258,7 +258,10 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/elasticsearch'
 LOGIN_EXEMPT_URLS  = [
   r'^administration/accounts/login',
-  r'^api'
+  r'^api',
+  # DON'T KEEP THESE LOGIN EXEMPT - TESTING ONLY
+  r'^access',
+  r'^ingest',
 ]
 
 # Django debug toolbar
