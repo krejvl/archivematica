@@ -809,3 +809,15 @@ def download_fs(request):
     except ValueError:
         raise django.http.Http404
 
+def download(request, uuid):
+    try:
+        f = models.File.objects.get(uuid=uuid)
+    except models.File.DoesNotExist:
+        response = {
+            'success': False,
+            'message': 'File with UUID ' + uuid + ' could not be found',
+        }
+        return helpers.json_response(response, status_code=404)
+    relative_path = f.currentlocation.replace('%transferDirectory%', '')
+    redirect_url = storage_service.extract_file_url(f.transfer_id, relative_path)
+    return django.http.HttpResponseRedirect(redirect_url)
