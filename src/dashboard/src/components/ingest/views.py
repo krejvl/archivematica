@@ -461,6 +461,7 @@ def _es_results_to_appraisal_tab_format(record, record_map, directory_list, not_
                 # have to artificially create directory IDs, since we don't assign those
                 'id': str(uuid.uuid4()),
                 'title': base64.b64encode(os.path.basename(node)),
+                'relative_path': base64.b64encode(node),
                 'not_draggable': not_draggable,
                 'object_count': 0,
                 'children': [],
@@ -483,6 +484,7 @@ def _es_results_to_appraisal_tab_format(record, record_map, directory_list, not_
         'type': 'file',
         'id': record['fileuuid'],
         'title': base64.b64encode(fn),
+        'relative_path': base64.b64encode(record['relative_path']),
         'size': record['size'],
         'tags': record['tags'],
         'bulk_extractor_reports': record['bulk_extractor_reports'],
